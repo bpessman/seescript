@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+  <head>
+    <title> SeeDesign </title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="./style.css">
+  </head>
+
+  <body>
+    <ul>
+      <li><a class="leftnav" href="#"> SeeScript </a><li>
+      <li><a class="rightnav" href="#">Documentation</a></li>
+      <li><a class="rightnav" href="#" onclick="downloadClicked()" id="downloadButton">Download</a></li>
+      <li><a class="rightnav" href="#" onclick="clearClicked()" id="clearButton">Clear Console</a></li>
+      <li><a class="rightnav" href="#" onclick="clearCodeClicked()" id="clearCodeButton">Clear Code</a></li>
+      <li><a class="rightnav" href="#" onclick="compileClicked()" id="compileButton">Run Code</a></li>
+    </ul>
+
+    <div class="grid-container">
+      <div class="item0">
+        <center>
+          <textarea class="input-textarea" id="codeInputArea"></textarea>
+        </center>
+      </div>
+      <div class="item0">
+        <center>
+          <svg id="canvas"></svg>
+        </center>
+      </div>
+      <div class="item0">
+        <center>
+          <textarea readonly class="console-textarea" id="codeOutputArea"></textarea>
+        </center>
+      </div>
+    </div>
+
+    <!-- SCRIPTS -->
+    <script src="gif.js"></script>
+    <script src="lib/other/Runtime.js"></script>
+    <script src="lib/other/KeyEvents.js"></script>
+    <script src="lib/other/RuntimeGlobalVariables.js"></script>
+    <script src="lib/parsar/ParsarGlobalVariables.js"></script>
+    <script src="lib/lexer/LexerGlobalVariables.js"></script>
+
+    <script src="lib/errors/Error.js"></script>
+    <script src="lib/other/ButtonActions.js"></script>
+
+    <script src="lib/lexer/literals/Identifier.js"></script>
+    <script src="lib/lexer/literals/Number.js"></script>
+    <script src="lib/lexer/literals/String.js"></script>
+    <script src="lib/lexer/HelperMethods.js"></script>
+    <script src="lib/lexer/Lexer.js"></script>
+    <script src="lib/lexer/tokens/Token.js"></script>
+    <script src="lib/lexer/tokens/TokenType.js"></script>
+    <script src="lib/parsar/Parsar.js"></script>
+    <script src="lib/parsar/ast/SyntaxTree.js"></script>
+    <script src="lib/parsar/objects/Objects.js"></script>
+    <script src="lib/parsar/HelperMethods.js"></script>
+  </body>
+</html>

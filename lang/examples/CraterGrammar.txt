@@ -1,0 +1,59 @@
+program
+  : statement* EOF;
+
+statement
+  : object
+  | IF "(" expression comparison expression ")" "{" statement* "}";
+
+object
+    : shape
+    | expression;
+
+expression
+    : literal
+    | unary
+    | binary
+    | object
+    | grouping;
+
+literal
+    : NUMBER
+    | STRING
+    | "true"
+    | "false";
+
+grouping
+    : "(" expression ")";
+
+unary
+    : ( "-" | "!" ) expression;
+
+binary
+    : expression operator expression;
+
+operator
+    : comparison
+    | "+"
+    | "-"
+    | "/"
+    | "*"
+    | ">>"
+    | "%";
+
+comparison
+    : "=="
+    | "<="
+    | ">="
+
+shape
+    : RECTANGLE
+    | CIRCLE
+    | ELLIPSE
+    | LINE
+    | POLYGON
+    | POLYLINE
+    | TEXT;
+
+loop
+    : WHILE "(" expression ")" "{" statement* "}"
+    | DO "{" statement* "}" WHILE "(" expression ")";

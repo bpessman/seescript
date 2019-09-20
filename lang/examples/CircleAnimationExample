@@ -1,0 +1,24 @@
+var box = rectangle (250,150,100,100,255,0,255);
+var x = 250;
+var y = 150;
+var currentX = 250;
+var currentY = 150;
+var angle = 0;
+
+var red = 0;
+var green = 0;
+var blue = 0;
+
+function FixedUpdate(10,10000) {
+	red = rand 100 + 100;
+	green = rand 255;
+	blue = rand 100 + 100;
+
+	angle++;
+	currentX = x + cos angle * 100;
+	currentY = y + sin angle * 100;
+	box.x = currentX;
+	box.y = currentY;
+
+	box.fill = "rgb(" + red + ",0," + blue + ")";
+}
