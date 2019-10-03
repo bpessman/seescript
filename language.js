@@ -1,12 +1,4 @@
 exports.runSeeScript = function(src) {
-  var startTime // Start time of Runtime Clock
-
-  var endTime // End time of Runtime Clock
-
-  var time // Total time elapsed (startTime - ednTime)
-
-  /* TokenTypes are also all global variables */
-
   var tokenList
 
   var source
@@ -16,16 +8,6 @@ exports.runSeeScript = function(src) {
   var current
 
   var start
-
-  var totalRuns
-
-  var debug // FUTURE: Will be used for debuging features for developement
-
-  var textarea
-
-  var errorList = []
-
-  var parsarLineNumber // Holds the current line number of the parsar
 
   var objectList // List of all the objects
 
@@ -40,74 +22,16 @@ exports.runSeeScript = function(src) {
   var svg = document.getElementById('canvas')
   var size = svg.getBoundingClientRect()
 
-  function ThrowError(line, location, message) {
-    this.line = line
-    this.message = message
-    this.location = location
-  }
-
   var objects = {
     id: null,
     value: null,
     type: null,
   }
 
-  ThrowError.prototype.getString = function() {
-    return (
-      '[Line: ' +
-      this.line +
-      ']\n[Location: ' +
-      this.location +
-      ']\n ->' +
-      ' ' +
-      this.message +
-      '\n\n'
-    )
-  }
-
-  /*
-  var gif = new GIF({
-    workers: 3,
-    quality: 1,
-  })
-
-  gif.setOption('debug', true)
-
-  function downloadBlob(name, blob) {
-    console.log('WE IN')
-    var link = document.createElement('a')
-    link.download = name
-    link.href = URL.createObjectURL(blob)
-    // Firefox needs the element to be live for some reason.
-    document.body.appendChild(link)
-    link.click()
-    setTimeout(function() {
-      URL.revokeObjectURL(link.href)
-      document.body.removeChild(link)
-    })
-  }
-
-  gif.on('finished', function(blob) {
-    downloadBlob('download.gif', blob)
-  })
-
-  // gif.setOption("width", 600);
-  // gif.setOption("height", 600);
-*/
-  totalRuns = 0
-
   function runProgram() {
-    startTime = new Date().getTime()
-
     resetInformation()
 
     parse(run((source = src)))
-
-    checkForErrors()
-
-    endTime = new Date().getTime()
-    time = endTime - startTime
-    //debug(time);
   }
 
   //----------------------------------------------------------------------------------------------
@@ -131,30 +55,10 @@ exports.runSeeScript = function(src) {
     tokenList = []
 
     // Global Parsar Variables
-    parsarLineNumber = 0
     objectList = []
     shapeList = []
 
-    // Other Global Variables
-    errorList = []
-
     clearTimeout(timeoutT)
-  }
-
-  function checkForErrors() {
-    for (var i = 0; i < errorList.length; i++) {
-      console.log(errorList[i].getString())
-    }
-  }
-
-  //----------------------------------------------------------------------------------------------
-  //    Debug Information
-  //----------------------------------------------------------------------------------------------
-
-  function debug(time) {
-    console.log(
-      'Debug Information->[Run:' + totalRuns + ']' + '[Time:' + time + 'ms]\n'
-    )
   }
 
   function Token(type, lexeme, line, literal) {
@@ -274,7 +178,7 @@ exports.runSeeScript = function(src) {
   keywordsList.set('class', CLASS)
   keywordsList.set('else', ELSE)
   keywordsList.set('false', FALSE)
-  keywordsList.set('function', FUNCTION)
+  keywordsList.set('func', FUNCTION)
   keywordsList.set('for', FOR)
   keywordsList.set('if', IF)
   keywordsList.set('null', NULL)
@@ -286,7 +190,7 @@ exports.runSeeScript = function(src) {
   keywordsList.set('var', VAR)
   keywordsList.set('while', WHILE)
   keywordsList.set('new', NEW)
-  keywordsList.set('rectangle', RECTANGLE)
+  keywordsList.set('rect', RECTANGLE)
   keywordsList.set('circle', CIRCLE)
   keywordsList.set('ellipse', ELLIPSE)
   keywordsList.set('line', LINE)
@@ -398,10 +302,6 @@ exports.runSeeScript = function(src) {
       nextCharacter()
     }
     if (current >= source.length) {
-      errorList.push(
-        new ThrowError(line, 'Lexer:String', 'Unterminated string found.')
-      )
-
       return
     }
     nextCharacter()
@@ -409,6 +309,10 @@ exports.runSeeScript = function(src) {
 
     addToken(STRING, value)
   }
+
+  /*============================================================================================
+        Lexer
+  *============================================================================================*/
 
   function run(source) {
     this.source = source
@@ -418,7 +322,6 @@ exports.runSeeScript = function(src) {
       scanToken()
     }
 
-    totalRuns++
     tokenList.push(new Token(EOF, '', line, null))
 
     return tokenList
@@ -509,9 +412,7 @@ exports.runSeeScript = function(src) {
         } else if (isAlpha) {
           identifier()
         } else {
-          errorList.push(
-            new ThrowError(line, 'Lexer', "Unexpected '" + c + "' character.")
-          )
+          //Error
         }
     }
   }
@@ -586,6 +487,10 @@ exports.runSeeScript = function(src) {
     }
   }
 
+  /*============================================================================================
+        Parser
+  *============================================================================================*/
+
   function parse(tokens) {
     var currentToken = 0
     var statementList = []
@@ -618,7 +523,6 @@ exports.runSeeScript = function(src) {
 
       statementList.push(statements(statement))
       currentToken++
-      parsarLineNumber++
     }
 
     for (i = 0; i < statementList.length; i++) {
@@ -669,13 +573,7 @@ exports.runSeeScript = function(src) {
 
         return new statementForLoop(count, loopTokens)
       } else {
-        errorList.push(
-          new ThrowError(
-            parsarLineNumber,
-            'Parsar',
-            'Missing a brace in for loop!'
-          )
-        )
+        // Error
       }
     }
 
@@ -871,14 +769,12 @@ exports.runSeeScript = function(src) {
     //    Throw an error if it reaches this point!
     //----------------------------------------------------------------------------------------------
     else {
-      errorList.push(
-        new ThrowError(
-          parsarLineNumber,
-          'Parsar',
-          'This statement is not recognized!'
-        )
-      )
+      // Error
     }
+
+    /*============================================================================================
+        Abstract Syntax Tree
+    *============================================================================================*/
 
     //----------------------------------------------------------------------------------------------
     //    Expression Calls
@@ -926,13 +822,7 @@ exports.runSeeScript = function(src) {
         createAnObject(id, value, NUMBER)
       )
     } else {
-      errorList.push(
-        new ThrowError(
-          parsarLineNumber,
-          'Parsar',
-          "You have not created a '" + id + "' object."
-        )
-      )
+      // Error
     }
   }
 
@@ -970,21 +860,6 @@ exports.runSeeScript = function(src) {
         statements(statement).evaluate()
         currentToken++
       }
-
-      // var data = new XMLSerializer().serializeToString(canvas)
-      // var svgBlob = new Blob([data], { type: 'image/svg+xml;charset=utf-8' })
-      // var url = URL.createObjectURL(svgBlob)
-
-      // var img = new Image()
-      // img.onload = function() {
-      //   gif.addFrame(img, {
-      //     delay: 500,
-      //     copy: true,
-      //   })
-      //   URL.revokeObjectURL(url)
-      // }
-
-      // img.src = url
 
       if (counter < iterations - 1) {
         counter++
@@ -1061,13 +936,7 @@ exports.runSeeScript = function(src) {
         objectList.push(createAnObject(id, value, type))
       }
     } else {
-      errorList.push(
-        new ThrowError(
-          parsarLineNumber,
-          'Parsar',
-          "You have already created a '" + id + "' object."
-        )
-      )
+      // Error
     }
   }
 
@@ -1093,13 +962,7 @@ exports.runSeeScript = function(src) {
     if (isAnObject(id)) {
       objectList.splice(getObjectIndex(id), 1, createAnObject(id, value, type))
     } else {
-      errorList.push(
-        new ThrowError(
-          parsarLineNumber,
-          'Parsar',
-          "You have not created a '" + id + "' object."
-        )
-      )
+      // Error
     }
   }
 
@@ -1116,7 +979,7 @@ exports.runSeeScript = function(src) {
 
     value = value.evaluate()
 
-    // codeOutputArea.value += value + '\n'
+    console.log(value + '\n')
   }
 
   //----------------------------------------------------------------------------------------------
@@ -1204,8 +1067,8 @@ exports.runSeeScript = function(src) {
     )
     shapeList.push(id)
     circle.setAttribute('id', id)
-    circle.setAttribute('cx', cx)
-    circle.setAttribute('cy', cy)
+    circle.setAttribute('cx', cx + size.width / 2 - width / 2)
+    circle.setAttribute('cy', cy + size.height / 2 - height / 2)
     circle.setAttribute('r', radius)
     circle.setAttribute('fill', 'rgb(' + red + ',' + green + ',' + blue + ')')
     document.getElementById('canvas').appendChild(circle)
@@ -1267,10 +1130,10 @@ exports.runSeeScript = function(src) {
     var line = document.createElementNS('http://www.w3.org/2000/svg', 'line')
     shapeList.push(id)
     line.setAttribute('id', id)
-    line.setAttribute('x1', x1)
-    line.setAttribute('y1', y1)
-    line.setAttribute('x2', x2)
-    line.setAttribute('y2', y2)
+    line.setAttribute('x1', x1 + size.width / 2 - width / 2)
+    line.setAttribute('y1', y1 + size.height / 2 - height / 2)
+    line.setAttribute('x2', x2 + size.width / 2 - width / 2)
+    line.setAttribute('y2', y2 + size.height / 2 - height / 2)
     line.setAttribute(
       'style',
       'stroke:rgb(' +
@@ -1331,8 +1194,8 @@ exports.runSeeScript = function(src) {
     )
     shapeList.push(id)
     textElement.setAttribute('id', id)
-    textElement.setAttribute('x', x)
-    textElement.setAttribute('y', y)
+    textElement.setAttribute('x', x + size.width / 2 - width / 2)
+    textElement.setAttribute('y', y + size.height / 2 - height / 2)
     textElement.setAttribute(
       'fill',
       'rgb(' + red + ',' + green + ',' + blue + ')'
@@ -1485,7 +1348,7 @@ exports.runSeeScript = function(src) {
         return left
       }
     } catch (error) {
-      errorList.push(new ThrowError(parsarLineNumber, 'Parsar', error))
+      // Error
     }
   }
 
