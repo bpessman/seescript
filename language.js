@@ -34,13 +34,6 @@ exports.runSeeScript = function(src) {
     parse(run((source = src)))
   }
 
-  //----------------------------------------------------------------------------------------------
-  //    Checking/Displaying Errors after Run
-  //----------------------------------------------------------------------------------------------
-  //----------------------------------------------------------------------------------------------
-  //    Resets all Global variables and the Canvas
-  //----------------------------------------------------------------------------------------------
-
   function resetInformation() {
     // Removes all the elements from previous runs
     var canvas = document.getElementById('canvas')
@@ -1001,21 +994,13 @@ exports.runSeeScript = function(src) {
   statementRectangle.prototype.evaluate = function() {
     var id = this.id
     var type = this.type
-    var x = this.x
-    var y = this.y
-    var width = this.width
-    var height = this.height
-    var red = this.red
-    var green = this.green
-    var blue = this.blue
-
-    x = x.evaluate()
-    y = y.evaluate()
-    width = width.evaluate()
-    height = height.evaluate()
-    red = red.evaluate()
-    green = green.evaluate()
-    blue = blue.evaluate()
+    var x = this.x.evaluate()
+    var y = this.y.evaluate()
+    var width = this.width.evaluate()
+    var height = this.height.evaluate()
+    var red = this.red.evaluate()
+    var green = this.green.evaluate()
+    var blue = this.blue.evaluate()
 
     var rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect')
     shapeList.push(id)
@@ -1047,19 +1032,12 @@ exports.runSeeScript = function(src) {
   statementCircle.prototype.evaluate = function() {
     var id = this.id
     var type = this.type
-    var cx = this.cx
-    var cy = this.cy
-    var radius = this.radius
-    var red = this.red
-    var green = this.green
-    var blue = this.blue
-
-    cx = cx.evaluate()
-    cy = cy.evaluate()
-    radius = radius.evaluate()
-    red = red.evaluate()
-    green = green.evaluate()
-    blue = blue.evaluate()
+    var cx = this.cx.evaluate()
+    var cy = this.cy.evaluate()
+    var radius = this.radius.evaluate()
+    var red = this.red.evaluate()
+    var green = this.green.evaluate()
+    var blue = this.blue.evaluate()
 
     var circle = document.createElementNS(
       'http://www.w3.org/2000/svg',
@@ -1067,8 +1045,8 @@ exports.runSeeScript = function(src) {
     )
     shapeList.push(id)
     circle.setAttribute('id', id)
-    circle.setAttribute('cx', cx + size.width / 2 - width / 2)
-    circle.setAttribute('cy', cy + size.height / 2 - height / 2)
+    circle.setAttribute('cx', cx + size.width / 2 - radius / 2)
+    circle.setAttribute('cy', cy + size.height / 2 - radius / 2)
     circle.setAttribute('r', radius)
     circle.setAttribute('fill', 'rgb(' + red + ',' + green + ',' + blue + ')')
     document.getElementById('canvas').appendChild(circle)
@@ -1109,31 +1087,22 @@ exports.runSeeScript = function(src) {
   statementLine.prototype.evaluate = function() {
     var id = this.id
     var type = this.type
-    var x1 = this.x1
-    var y1 = this.y1
-    var x2 = this.x2
-    var y2 = this.y2
-    var red = this.red
-    var green = this.green
-    var blue = this.blue
-    var strokeWidth = this.strokeWidth
-
-    x1 = x1.evaluate()
-    y1 = y1.evaluate()
-    x2 = x2.evaluate()
-    y2 = y2.evaluate()
-    red = red.evaluate()
-    green = green.evaluate()
-    blue = blue.evaluate()
-    strokeWidth = strokeWidth.evaluate()
+    var x1 = this.x1.evaluate()
+    var y1 = this.y1.evaluate()
+    var x2 = this.x2.evaluate()
+    var y2 = this.y2.evaluate()
+    var red = this.red.evaluate()
+    var green = this.green.evaluate()
+    var blue = this.blue.evaluate()
+    var strokeWidth = this.strokeWidth.evaluate()
 
     var line = document.createElementNS('http://www.w3.org/2000/svg', 'line')
     shapeList.push(id)
     line.setAttribute('id', id)
-    line.setAttribute('x1', x1 + size.width / 2 - width / 2)
-    line.setAttribute('y1', y1 + size.height / 2 - height / 2)
-    line.setAttribute('x2', x2 + size.width / 2 - width / 2)
-    line.setAttribute('y2', y2 + size.height / 2 - height / 2)
+    line.setAttribute('x1', x1 + size.width / 2 - (x2 - x1) / 2)
+    line.setAttribute('y1', y1 + size.height / 2 - (y2 - y1) / 2)
+    line.setAttribute('x2', x2 + size.width / 2 - (x2 - x1) / 2)
+    line.setAttribute('y2', y2 + size.height / 2 - (y2 - y1) / 2)
     line.setAttribute(
       'style',
       'stroke:rgb(' +
@@ -1174,19 +1143,12 @@ exports.runSeeScript = function(src) {
   statementText.prototype.evaluate = function() {
     var id = this.id
     var type = this.type
-    var x = this.x
-    var y = this.y
-    var text = this.text
-    var red = this.red
-    var green = this.green
-    var blue = this.blue
-
-    x = x.evaluate()
-    y = y.evaluate()
-    text = text.evaluate()
-    red = red.evaluate()
-    green = green.evaluate()
-    blue = blue.evaluate()
+    var x = this.x.evaluate()
+    var y = this.y.evaluate()
+    var text = this.text.evaluate()
+    var red = this.red.evaluate()
+    var green = this.green.evaluate()
+    var blue = this.blue.evaluate()
 
     var textElement = document.createElementNS(
       'http://www.w3.org/2000/svg',
