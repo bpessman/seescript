@@ -171,7 +171,7 @@ exports.runSeeScript = function(src) {
   keywordsList.set('class', CLASS)
   keywordsList.set('else', ELSE)
   keywordsList.set('false', FALSE)
-  keywordsList.set('func', FUNCTION)
+  keywordsList.set('funct', FUNCTION)
   keywordsList.set('for', FOR)
   keywordsList.set('if', IF)
   keywordsList.set('null', NULL)
@@ -528,7 +528,7 @@ exports.runSeeScript = function(src) {
     //    Animation Statement
     //----------------------------------------------------------------------------------------------
 
-    if (has(statement, FUNCTION) && has(statement, FIXEDUPDATE)) {
+    if (has(statement, FUNCTION) && has(statement, ANIMATE)) {
       var delay = statement[3].literal
       var iterations = statement[5].literal
       var loopTokens = statement.slice(8, statement.length)
