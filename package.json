@@ -1,6 +1,6 @@
 {
   "name": "seescript",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "A Programming Language for SVG animations",
   "main": "language.js",
   "scripts": {
