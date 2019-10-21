@@ -167,11 +167,12 @@ exports.runSeeScript = function(src) {
   //----------------------------------------------------------------------------------------------
 
   var keywordsList = new Map()
+  keywordsList.set('as', EQUAL)
   keywordsList.set('and', AND)
   keywordsList.set('class', CLASS)
   keywordsList.set('else', ELSE)
   keywordsList.set('false', FALSE)
-  keywordsList.set('funct', FUNCTION)
+  keywordsList.set('animate', FUNCTION)
   keywordsList.set('for', FOR)
   keywordsList.set('if', IF)
   keywordsList.set('null', NULL)
@@ -180,7 +181,7 @@ exports.runSeeScript = function(src) {
   keywordsList.set('return', RETURN)
   keywordsList.set('this', THIS)
   keywordsList.set('true', TRUE)
-  keywordsList.set('var', VAR)
+  keywordsList.set('set', VAR)
   keywordsList.set('while', WHILE)
   keywordsList.set('new', NEW)
   keywordsList.set('rect', RECTANGLE)
@@ -373,9 +374,9 @@ exports.runSeeScript = function(src) {
       case '!':
         addToken(match('=') ? NOT_EQUAL : NOT, null)
         break
-      case '=':
-        addToken(match('=') ? EQUAL_EQUAL : EQUAL, null)
-        break
+      // case '=':
+      //   addToken(match('=') ? EQUAL_EQUAL : EQUAL, null)
+      //   break
       case '<':
         if (match('<')) {
           addToken(ARROW, null)
