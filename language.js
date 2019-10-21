@@ -172,7 +172,7 @@ exports.runSeeScript = function(src) {
   keywordsList.set('class', CLASS)
   keywordsList.set('else', ELSE)
   keywordsList.set('false', FALSE)
-  keywordsList.set('animate', FUNCTION)
+  // keywordsList.set('animate', FUNCTION)
   keywordsList.set('for', FOR)
   keywordsList.set('if', IF)
   keywordsList.set('null', NULL)
@@ -528,11 +528,10 @@ exports.runSeeScript = function(src) {
     //----------------------------------------------------------------------------------------------
     //    Animation Statement
     //----------------------------------------------------------------------------------------------
-
-    if (has(statement, FUNCTION) && has(statement, ANIMATE)) {
-      var delay = statement[3].literal
-      var iterations = statement[5].literal
-      var loopTokens = statement.slice(8, statement.length)
+    if (has(statement, ANIMATE)) {
+      var delay = statement[2].literal
+      var iterations = statement[4].literal
+      var loopTokens = statement.slice(7, statement.length)
 
       return new statementAnimate(delay, iterations, loopTokens)
     }
